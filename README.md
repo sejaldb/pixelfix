@@ -1,0 +1,2 @@
+# pixelfix
+debugging copilot
