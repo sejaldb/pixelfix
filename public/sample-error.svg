@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="550" viewBox="0 0 1000 550">
+  <rect width="1000" height="550" rx="12" fill="#111827"/>
+  <rect width="1000" height="48" rx="12" fill="#1b2535"/>
+  <circle cx="27" cy="24" r="6" fill="#fc6d72"/><circle cx="48" cy="24" r="6" fill="#f5c15f"/><circle cx="69" cy="24" r="6" fill="#62c987"/>
+  <text x="500" y="30" fill="#aab6c8" font-family="Arial,sans-serif" font-size="14" text-anchor="middle">Terminal — python app.py</text>
+  <text x="38" y="91" fill="#7cb7ff" font-family="monospace" font-size="15">$ python app.py</text>
+  <text x="38" y="128" fill="#f08c98" font-family="monospace" font-size="15">Traceback (most recent call last):</text>
+  <text x="38" y="161" fill="#c2cad6" font-family="monospace" font-size="14">  File "/workspace/app.py", line 1, in &lt;module&gt;</text>
+  <text x="38" y="191" fill="#e4e9f1" font-family="monospace" font-size="14">    import requests</text>
+  <text x="38" y="221" fill="#f08c98" font-family="monospace" font-size="14">ModuleNotFoundError: No module named 'requests'</text>
+  <rect x="28" y="265" width="944" height="1" fill="#2b3748"/>
+  <text x="38" y="302" fill="#77859a" font-family="monospace" font-size="12">Process finished with exit code 1</text>
+  <rect x="28" y="342" width="944" height="155" rx="8" fill="#141e2d" stroke="#28364a"/>
+  <text x="50" y="378" fill="#91a1b6" font-family="Arial,sans-serif" font-size="13">SAMPLE ERROR SCREENSHOT</text>
+  <text x="50" y="411" fill="#718097" font-family="Arial,sans-serif" font-size="12">Example: missing Python dependency</text>
+  <text x="50" y="441" fill="#718097" font-family="Arial,sans-serif" font-size="12">Run analysis to see a response from the configured model.</text>
+  <text x="50" y="471" fill="#718097" font-family="Arial,sans-serif" font-size="12">No AI result is included in this sample asset.</text>
+</svg>

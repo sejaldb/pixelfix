@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0918">
+  <meta name="description" content="Evidence-based visual debugging with Gemma 4 and offline troubleshooting.">
+  <title>PIXELFIX AI — Visual Debugging Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="PIXELFIX AI home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>PIXELFIX<span class="brand-ai"> AI</span></span>
+      </a>
+      <p class="tagline">See the Error. Understand the Cause. Fix It.</p>
+      <div class="header-actions">
+        <span id="mode-indicator" class="mode-indicator" aria-live="polite"><span class="mode-dot"></span><span id="mode-text">Checking mode</span></span>
+        <button id="new-session" class="button button-quiet" type="button">New session <span aria-hidden="true">↗</span></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy-block">
+          <p class="eyebrow"><span class="eyebrow-line"></span> YOUR DEBUGGING COPILOT</p>
+          <h1>From error<br>to <span>“I’ve got this.”</span></h1>
+          <p class="hero-copy">Share a screenshot, source file, or pasted error to understand what went wrong, get a practical next step, then compare your evidence to see what changed.</p>
+        </div>
+        <aside class="journey-card" aria-label="How PIXELFIX works">
+          <div class="journey-card-heading"><span class="journey-spark" aria-hidden="true">✳</span><span>YOUR DEBUGGING FLOW</span></div>
+          <ol class="journey-steps">
+            <li><span class="journey-number">01</span><span><strong>Share what you see</strong>            <small>Screenshot, source file, or pasted text</small></span></li>
+            <li><span class="journey-number">02</span><span><strong>Get a clear next step</strong><small>Evidence first, guesswork last</small></span></li>
+            <li><span class="journey-number">03</span><span><strong>Check your progress</strong><small>Compare before and after</small></span></li>
+          </ol>
+          <div class="privacy-note"><span aria-hidden="true">⌑</span> Your evidence is sent for analysis only when you choose.</div>
+        </aside>
+      </section>
+
+      <div id="global-error" class="notice notice-error" role="alert" hidden></div>
+
+      <section class="workspace-card" aria-labelledby="analyze-heading">
+        <div class="section-heading">
+          <div class="step-badge">01</div>
+          <div><p class="eyebrow">START WITH THE EVIDENCE</p><h2 id="analyze-heading">Analyze an error</h2></div>
+          <span class="section-meta">SCREENSHOT · SOURCE · TEXT</span>
+        </div>
+        <div class="evidence-methods" role="group" aria-label="Choose evidence type">
+          <button class="evidence-method is-active" type="button" data-method="screenshot" aria-pressed="true">Upload Screenshot</button>
+          <button class="evidence-method" type="button" data-method="source" aria-pressed="false">Upload Source File</button>
+          <button class="evidence-method" type="button" data-method="text" aria-pressed="false">Paste Code or Error Text</button>
+        </div>
+        <div id="evidence-screenshot" class="evidence-method-panel">
+          <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-label="Choose or drop an error screenshot">
+            <input id="screenshot-input" type="file" accept="image/png,image/jpeg,.jpg,.jpeg,.png" hidden>
+            <div id="upload-empty" class="upload-empty">
+              <div class="upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4 15.5v3A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5v-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <strong>Let’s take a look at the error</strong>
+              <span>Drop a screenshot here or <button id="browse-button" class="text-button" type="button">choose a file</button></span>
+              <small>PNG or JPG · Up to 8 MB · Only sent when you select “Analyze evidence”</small>
+            </div>
+            <div id="preview-wrap" class="preview-wrap" hidden>
+              <img id="screenshot-preview" alt="Screenshot selected for analysis">
+              <div class="preview-caption"><span id="preview-name"></span><button id="remove-image" class="icon-button" type="button" aria-label="Remove screenshot">×</button></div>
+            </div>
+          </div>
+        </div>
+        <div id="evidence-source" class="evidence-method-panel" hidden>
+          <input id="source-input" type="file" accept=".py,.java,.c,.h,.cpp,.cc,.cxx,.hpp,.js,.jsx,.ts,.tsx,.html,.css,.sql,.json,.xml,.sh,.ps1,.txt,.log" hidden>
+          <div id="source-drop-zone" class="source-drop-zone" tabindex="0" role="button" aria-label="Choose or drop one source file">
+            <div id="source-empty" class="upload-empty">
+              <div class="upload-icon" aria-hidden="true"><span>⌘</span></div>
+              <strong>Share one source or log file</strong>
+              <span>Drop a file here or <button id="source-browse-button" class="text-button" type="button">browse files</button></span>
+              <small id="source-size-limit">Code, markup, scripts, JSON, logs · Up to 1 MB</small>
+            </div>
+            <div id="source-file-details" class="source-file-details" hidden>
+              <div class="source-file-icon" aria-hidden="true">&lt;/&gt;</div>
+              <div class="source-file-info"><strong id="source-file-name"></strong><span id="source-file-meta"></span><span id="source-file-language"></span></div>
+              <button id="remove-source" class="icon-button" type="button" aria-label="Remove source file">×</button>
+            </div>
+          </div>
+        </div>
+        <div id="evidence-text" class="evidence-method-panel" hidden>
+          <label class="analysis-input-label" for="analysis-text">Paste source code, an error message, traceback, or terminal output</label>
+          <textarea id="analysis-text" class="analysis-textarea" maxlength="1048576" placeholder="Paste the relevant code or exact error output here. Avoid including secrets or credentials."></textarea>
+          <div class="analysis-text-options">
+            <label for="analysis-language">Language (optional)</label>
+            <select id="analysis-language">
+              <option value="Not specified">Not specified</option><option>Python</option><option>Java</option><option>C</option><option>C++</option><option>JavaScript</option><option>TypeScript</option><option>HTML</option><option>CSS</option><option>SQL</option><option>JSON</option><option>XML</option><option>Shell</option><option>PowerShell</option>
+            </select>
+            <span id="analysis-size-limit">Maximum 1 MB · Sent only when you choose Analyze evidence</span>
+          </div>
+        </div>
+        <div class="action-row">
+          <button id="analyze-button" class="button button-primary" type="button" disabled><span class="button-icon">✳</span> Analyze evidence</button>
+          <button id="sample-button" class="button button-secondary" type="button"><span aria-hidden="true">◉</span> Try sample error</button>
+          <span class="action-hint">Your evidence is sent only when you choose Analyze evidence.</span>
+        </div>
+      </section>
+
+      <section id="analysis-section" class="results-section" aria-labelledby="analysis-title" hidden>
+        <div class="section-heading results-heading">
+          <div class="step-badge">02</div>
+          <div><p class="eyebrow">THE DIAGNOSIS</p><h2 id="analysis-title">What we can see</h2></div>
+          <span id="analysis-source" class="source-pill"></span>
+        </div>
+        <div class="analysis-grid">
+          <article class="result-card evidence-card"><div class="card-label"><span class="label-icon evidence-icon">⌕</span> OBSERVED EVIDENCE</div><p id="observed-evidence" class="result-copy"></p></article>
+          <article class="result-card"><div class="card-label"><span class="label-icon cause-icon">◎</span> LIKELY ROOT CAUSE</div><p id="root-cause" class="result-copy"></p><div id="confidence" class="confidence"></div></article>
+          <article class="result-card fix-card"><div class="card-label"><span class="label-icon fix-icon">↗</span> SUGGESTED FIX</div><p id="suggested-fix" class="result-copy"></p></article>
+          <article class="result-card"><div class="card-label"><span class="label-icon why-icon">?</span> WHY THIS FIX WORKS</div><p id="why-fix-works" class="result-copy"></p></article>
+          <article class="result-card checklist-card"><div class="card-label"><span class="label-icon checklist-icon">✓</span> FIX-IT CHECKLIST</div><p class="card-subtitle">Suggested actions only. Nothing runs automatically.</p><ol id="fix-checklist" class="fix-checklist"></ol></article>
+          <article class="result-card missing-card"><div class="card-label"><span class="label-icon missing-icon">…</span> MISSING INFORMATION</div><p id="missing-information" class="result-copy"></p></article>
+        </div>
+      </section>
+
+      <section id="comparison-section" class="comparison-section" aria-labelledby="comparison-title">
+        <div class="section-heading">
+          <div class="step-badge">03</div>
+          <div><p class="eyebrow">PROVE THE DIFFERENCE</p><h2 id="comparison-title">Before vs. after</h2></div>
+          <span class="section-meta">SCREENSHOTS · TEXT · CODE</span>
+        </div>
+        <p class="comparison-intro">Compare screenshots, pasted code, error messages, terminal output, or test results. Use either evidence type—or both—on each side.</p>
+        <div class="comparison-grid">
+          <div class="compare-panel">
+            <div class="panel-topline"><span class="image-label before-label"><i></i> BEFORE · ORIGINAL ERROR</span><span id="before-caption" class="image-caption">Optional screenshot</span></div>
+            <div class="evidence-panel-content">
+              <div class="evidence-upload-row">
+                <label for="before-input" class="button button-secondary evidence-upload-button">↑ Add BEFORE screenshot</label>
+                <input id="before-input" type="file" accept="image/png,image/jpeg,.jpg,.jpeg,.png" hidden>
+                <span class="evidence-input-hint">PNG or JPG · Up to 8 MB</span>
+              </div>
+              <div id="before-image-placeholder" class="evidence-image-placeholder">No BEFORE screenshot added</div>
+              <div id="before-preview-wrap" class="compare-image-wrap" hidden><img id="before-image" alt="Before screenshot for comparison"><button id="remove-before" class="replace-image" type="button">Remove screenshot</button></div>
+              <label class="evidence-text-label" for="before-text">Original source, error, or terminal output <span>Optional</span></label>
+              <textarea id="before-text" class="evidence-textarea" maxlength="20000" rows="6" placeholder="Paste the original code, traceback, error message, or terminal output here…" aria-describedby="before-help"></textarea>
+              <span id="before-help" class="evidence-input-hint">Up to 20,000 characters. Your text is sent only when you compare.</span>
+            </div>
+          </div>
+          <div class="compare-panel">
+            <div class="panel-topline"><span class="image-label after-label"><i></i> AFTER · AFTER FIX</span><span id="after-caption" class="image-caption">Optional screenshot</span></div>
+            <div class="evidence-panel-content">
+              <div class="evidence-upload-row">
+                <label for="after-input" class="button button-secondary evidence-upload-button">↑ Add AFTER screenshot</label>
+              <input id="after-input" type="file" accept="image/png,image/jpeg,.jpg,.jpeg,.png" hidden>
+                <span class="evidence-input-hint">PNG or JPG · Up to 8 MB</span>
+              </div>
+              <div id="after-image-placeholder" class="evidence-image-placeholder">No AFTER screenshot added</div>
+              <div id="after-preview-wrap" class="compare-image-wrap" hidden><img id="after-image" alt="After screenshot for comparison"><button id="remove-after" class="replace-image" type="button">Remove screenshot</button></div>
+              <label class="evidence-text-label" for="after-text">Updated code, output, or test results <span>Optional</span></label>
+              <textarea id="after-text" class="evidence-textarea" maxlength="20000" rows="6" placeholder="Paste the updated code, new terminal output, or test results here…" aria-describedby="after-help"></textarea>
+              <span id="after-help" class="evidence-input-hint">Up to 20,000 characters. Your text is sent only when you compare.</span>
+            </div>
+          </div>
+        </div>
+        <div class="compare-actions"><button id="compare-button" class="button button-primary" type="button" disabled>Compare before &amp; after <span aria-hidden="true">→</span></button><span class="compare-hint">Add at least one input on BOTH sides. A comparison is not a substitute for running your tests.</span></div>
+        <div id="comparison-result" class="comparison-result" hidden aria-live="polite"></div>
+      </section>
+
+      <section class="offline-section" aria-labelledby="offline-title">
+        <div class="offline-heading"><div class="step-badge step-muted">↯</div><div><p class="eyebrow">A QUICK LOCAL LOOKUP</p><h2 id="offline-title">Prefer to paste the error?</h2><p>Get practical tips for common errors without sending anything to the AI.</p></div><span class="offline-badge"><i></i> PRIVATE · LOCAL</span></div>
+        <form id="offline-form" class="offline-form">
+          <label class="visually-hidden" for="error-text">Paste your error message</label>
+          <textarea id="error-text" rows="3" maxlength="5000" placeholder="Paste an error, for example: ModuleNotFoundError: No module named 'requests'"></textarea>
+          <div class="offline-form-footer"><span>Common Python, HTTP, and connection errors · No data is sent</span><button id="offline-submit" class="button button-secondary" type="submit">Find a local fix <span aria-hidden="true">→</span></button></div>
+        </form>
+        <div id="offline-results" class="offline-results" hidden aria-live="polite"></div>
+      </section>
+    </main>
+    <footer><span><span class="footer-mark">PIXELFIX</span> AI <span class="footer-separator">·</span> Small steps. Clearer debugging.</span><span>AI can be wrong. Review suggestions and run your tests.</span></footer>
+  </div>
+  <script src="/knowledge-base.js"></script>
+  <script src="/script.js"></script>
+</body>
+</html>
